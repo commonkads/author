@@ -13,6 +13,5 @@
 
 ## Out of scope
 
-- New authoring features beyond what `strata/author` already provided
 - Implementing the placeholder functionality noted in the README
 - Publishing to GitHub Packages (that is a release-phase concern)
