@@ -1,10 +1,4 @@
-import {
-  LocalFileStore,
-  FileStoreKnowledgeAdapter,
-  RuntimeEngine,
-  buildInference,
-  consoleWriter,
-} from '@commonkads/engine';
+import { RuntimeEngine, buildInference, consoleWriter } from '@commonkads/engine';
 
 import { runTests } from '../testing/test-runner.js';
 import type { TestCaseResult } from '../types/test-case-result.js';
@@ -19,8 +13,7 @@ export interface TestCommandOptions {
 export async function testCommand(options: TestCommandOptions): Promise<void> {
   const inferenceConfig = { type: options.provider, model: options.model };
   const inference = buildInference(inferenceConfig);
-  const fileStore = new LocalFileStore(options.knowledgeRoot);
-  const engine = new RuntimeEngine(new FileStoreKnowledgeAdapter(fileStore), inference);
+  const engine = new RuntimeEngine(inference);
 
   const results = await runTests({ knowledgeRoot: options.knowledgeRoot, engine });
 

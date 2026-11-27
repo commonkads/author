@@ -3,10 +3,12 @@ import { join } from 'node:path';
 
 import { parse as parseYaml } from 'yaml';
 import {
+  LocalFileStore,
   RuntimeContext,
   RuntimeEngine,
   loadDomainManifest,
   loadTaskFromManifest,
+  type ICatalog,
 } from '@commonkads/engine';
 
 import type { TestCase } from '../types/test-case.js';
@@ -36,12 +38,17 @@ export async function runTests(options: RunTestsOptions): Promise<TestCaseResult
 
   const manifest = loadDomainManifest(knowledgeRoot);
   const task = loadTaskFromManifest(manifest);
+  const fileStore = new LocalFileStore(knowledgeRoot);
+  const catalog: ICatalog = {
+    getTask: async (_id: string) => task,
+    getModel: (id: string) => fileStore.readWithVersion(id),
+  };
 
   const results: TestCaseResult[] = [];
   for (const filePath of testFiles) {
     const raw = await readFile(filePath, 'utf-8');
     const testCase = parseYaml(raw) as TestCase;
-    const context = new RuntimeContext();
+    const context = new RuntimeContext({ catalog });
 
     try {
       const actual = await engine.execute<Record<string, unknown>, Record<string, unknown>>(
