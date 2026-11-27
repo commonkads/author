@@ -36,7 +36,7 @@
     "test:ci": "node --no-warnings --import tsx/esm --test-reporter spec --test-reporter-destination stdout --test-reporter junit --test-reporter-destination test-results.xml --test $(find src -name '*.test.ts' | sort)"
   },
   "dependencies": {
-    "@commonkads/engine": "*",
+    "@commonkads/engine": "^0.4.0",
     "commander": "^14.0.3",
     "yaml": "^2.9.1"
   },
